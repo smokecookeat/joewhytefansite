@@ -1,0 +1,59 @@
+{
+  "events": [
+    {
+      "id": 1,
+      "name": "Stand-Up Comedy Night",
+      "type": "comedy",
+      "date": "2026-03-28",
+      "time": "8:00 PM",
+      "venue": "The Comedy Store",
+      "city": "Hollywood, CA",
+      "description": "Joe's returning to the stage with all new material! Don't miss this hilarious night of stand-up.",
+      "ticketUrl": ""
+    },
+    {
+      "id": 2,
+      "name": "Horror Gaming Convention 2026",
+      "type": "convention",
+      "date": "2026-04-15",
+      "time": "10:00 AM - 6:00 PM",
+      "venue": "Los Angeles Convention Center",
+      "city": "Los Angeles, CA",
+      "description": "Resident Evil reunion panel at 2PM! Autograph signing and meet & greet all day.",
+      "ticketUrl": "https://example.com/tickets"
+    },
+    {
+      "id": 3,
+      "name": "Animation Expo 2026",
+      "type": "panel",
+      "date": "2026-05-20",
+      "time": "2:00 PM - 4:00 PM",
+      "venue": "Anaheim Convention Center",
+      "city": "Anaheim, CA",
+      "description": "Panel discussion: 'The Golden Age of Disney Animation' - Stories from the studio!",
+      "ticketUrl": "https://example.com/animationexpo"
+    },
+    {
+      "id": 4,
+      "name": "SpongeBob Fan Celebration",
+      "type": "signing",
+      "date": "2026-06-10",
+      "time": "1:00 PM - 5:00 PM",
+      "venue": "San Diego Convention Center",
+      "city": "San Diego, CA",
+      "description": "Meet the voice of Mr. Krabs and Mermaid Man from the classic SpongeBob games!",
+      "ticketUrl": ""
+    },
+    {
+      "id": 5,
+      "name": "Retro Gaming Festival",
+      "type": "convention",
+      "date": "2026-07-22",
+      "time": "11:00 AM - 7:00 PM",
+      "venue": "Portland Expo Center",
+      "city": "Portland, OR",
+      "description": "Celebrating classic GameCube games including Resident Evil Remake. Q&A and signings!",
+      "ticketUrl": "https://example.com/retrogaming"
+    }
+  ]
+}

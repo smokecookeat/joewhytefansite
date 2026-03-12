@@ -1,0 +1,37 @@
+{
+  "messages": [
+    {
+      "id": 1,
+      "name": "ChrisRedfieldFan2002",
+      "message": "Joe, your portrayal of Chris Redfield is LEGENDARY! I've played the RE Remake at least 50 times and your voice work still gives me chills. Thank you for bringing such an iconic character to life!",
+      "date": "2026-03-01",
+      "adminReply": "Thank you so much! Recording that game was an incredible experience. The whole team at Capcom was amazing to work with. Stay safe out there, S.T.A.R.S. member! 🧟",
+      "replyDate": "2026-03-02"
+    },
+    {
+      "id": 2,
+      "name": "DisneyAnimationLover",
+      "message": "Just watched Chicken Little with my kids and found out you worked on it! So cool that you did both voice AND modeling work. What was your favorite Disney project?",
+      "date": "2026-02-28",
+      "adminReply": "That's a tough one! Bolt holds a special place in my heart because I was Senior Modeler on that one. But honestly, every project at Disney felt like magic. Thanks for watching with your kids! 🎬",
+      "replyDate": "2026-03-01"
+    },
+    {
+      "id": 3,
+      "name": "SpongeBobGamer",
+      "message": "ARE YOU FEELING IT NOW MR. KRABS?! 🦀 Battle for Bikini Bottom was my childhood and your voice work was perfect!",
+      "date": "2026-02-25",
+      "adminReply": null,
+      "replyDate": null
+    },
+    {
+      "id": 4,
+      "name": "ImprovFanLA",
+      "message": "Saw you at The Comedy Store last month - you were HILARIOUS! When's your next show? I'm bringing all my friends!",
+      "date": "2026-02-20",
+      "adminReply": "So glad you came out! Check the events section for upcoming shows. Always love seeing familiar faces in the crowd! 🎤",
+      "replyDate": "2026-02-21"
+    }
+  ],
+  "bannedUsers": []
+}
