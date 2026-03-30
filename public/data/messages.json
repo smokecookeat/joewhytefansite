@@ -31,6 +31,14 @@
       "date": "2026-02-20",
       "adminReply": "So glad you came out! Check the events section for upcoming shows. Always love seeing familiar faces in the crowd! 🎤",
       "replyDate": "2026-02-21"
+    },
+    {
+      "id": 5,
+      "name": "BlueEyeSamuraiFan",
+      "message": "Just found out you worked on Blue Eye Samurai - that show is INCREDIBLE! The animation is stunning. What was it like working on such a unique project?",
+      "date": "2026-02-15",
+      "adminReply": "Blue Eye Samurai was such a special project! The team at Netflix really pushed the boundaries of what's possible in animation. Proud to have contributed to it! ⚔️",
+      "replyDate": "2026-02-16"
     }
   ],
   "bannedUsers": []

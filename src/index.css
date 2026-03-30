@@ -2,27 +2,139 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  margin: 0;
-  background: #020617;
-  color: white;
-  font-family: system-ui, -apple-system, sans-serif;
+* {
+  box-sizing: border-box;
 }
 
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background: #000;
+  color: #fff;
+  overflow-x: hidden;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #111;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #dc2626;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #ef4444;
+}
+
+/* Marvel-style animations */
 @keyframes pulse-glow {
-  0%, 100% { opacity: 0.2; }
-  50% { opacity: 0.4; }
+  0%, 100% { opacity: 0.3; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(1.05); }
+}
+
+@keyframes slide-in {
+  from { opacity: 0; transform: translateX(-20px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes hero-entrance {
+  from { opacity: 0; transform: scale(0.9) translateY(20px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+@keyframes comic-pop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
 }
 
 .animate-pulse-glow {
   animation: pulse-glow 4s ease-in-out infinite;
 }
 
-@keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
+.animate-slide-in {
+  animation: slide-in 0.5s ease-out forwards;
 }
 
-.animate-float {
-  animation: float 3s ease-in-out infinite;
+.animate-hero-entrance {
+  animation: hero-entrance 0.8s ease-out forwards;
+}
+
+.animate-comic-pop {
+  animation: comic-pop 0.3s ease-out;
+}
+
+/* Comic book style halftone overlay */
+.halftone-overlay {
+  background-image: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+  background-size: 4px 4px;
+}
+
+/* Diagonal stripes */
+.diagonal-stripes {
+  background-image: repeating-linear-gradient(
+    -45deg,
+    transparent,
+    transparent 10px,
+    rgba(255,255,255,0.03) 10px,
+    rgba(255,255,255,0.03) 20px
+  );
+}
+
+/* Red accent line */
+.accent-line {
+  position: relative;
+}
+
+.accent-line::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, #dc2626, #f59e0b);
+}
+
+/* Skewed container */
+.skewed {
+  transform: skewX(-3deg);
+}
+
+.skewed > * {
+  transform: skewX(3deg);
+}
+
+/* Glowing text */
+.glow-text {
+  text-shadow: 0 0 10px rgba(220, 38, 38, 0.5),
+               0 0 20px rgba(220, 38, 38, 0.3),
+               0 0 30px rgba(220, 38, 38, 0.2);
+}
+
+/* Card hover effects */
+.card-hover {
+  transition: all 0.3s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-4px) rotate(1deg);
+  box-shadow: 0 10px 40px rgba(220, 38, 38, 0.2);
+}
+
+/* Focus styles */
+input:focus, textarea:focus, button:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px #dc2626;
+}
+
+/* Selection color */
+::selection {
+  background: #dc2626;
+  color: #fff;
 }

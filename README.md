@@ -1,6 +1,8 @@
-# Joe Whyte Fan Zone 🎤
+# 🎬 Joe Whyte Fan Zone
 
-Official fan site for Joe Whyte - Voice Actor, Disney Animator, Gaming Icon, and Comedy Legend.
+Official fan site for **Joe Whyte** - Voice Actor, Disney Animator, Gaming Icon, and Comedy Legend.
+
+Built with a Marvel-inspired design featuring bold typography, dynamic animations, and interactive elements.
 
 ## 🚀 Quick Deploy to Vercel
 
@@ -13,7 +15,7 @@ Official fan site for Joe Whyte - Voice Actor, Disney Animator, Gaming Icon, and
 
 ## 🔐 Admin Login Setup
 
-Set these environment variables in Vercel to secure your admin panel:
+Set these environment variables in Vercel:
 
 1. Go to your Vercel project → **Settings** → **Environment Variables**
 2. Add:
@@ -21,7 +23,24 @@ Set these environment variables in Vercel to secure your admin panel:
    - `VITE_ADMIN_PASS` = your_secure_password
 3. Click **Redeploy** for changes to take effect
 
-**Default credentials (if env vars not set):** admin / joewhyte2026
+**Default credentials:** admin / joewhyte2026
+
+## 📱 Features
+
+### Pages
+- **HOME** - Hero section, events, stats, quick links
+- **CREDITS** - Career achievements (Disney, Gaming, Other, Comedy)
+- **ART** - Gallery of Joe's CG modeling work
+- **SOCIAL** - Instagram, YouTube, Facebook feeds
+- **FAN ZONE** - Message board with admin moderation
+- **ABOUT** - Bio and personal info
+- **ADMIN** - Dashboard for site management
+
+### Admin Features
+- ✅ Reply to fan messages
+- ✅ Delete inappropriate content
+- ✅ Ban users from posting
+- ✅ View pending submissions
 
 ## 📁 Project Structure
 
@@ -33,25 +52,19 @@ joe-whyte-fansite/
 │   │   └── messages.json    ← Approved fan messages
 │   └── favicon.svg
 ├── src/
-│   ├── App.jsx              ← Main site (email config at top)
+│   ├── App.jsx              ← Main site
 │   ├── main.jsx
 │   └── index.css
 ├── index.html
 ├── package.json
+├── vite.config.js
+├── tailwind.config.js
 └── README.md
 ```
 
 ## 📅 Managing Events
 
-Events are stored in `public/data/events.json`. To add/edit events:
-
-1. Go to your GitHub repository
-2. Navigate to `public/data/events.json`
-3. Click the pencil icon to edit
-4. Add or modify events
-5. Commit changes - Vercel auto-deploys!
-
-### Event Format
+Edit `public/data/events.json` on GitHub:
 
 ```json
 {
@@ -59,11 +72,11 @@ Events are stored in `public/data/events.json`. To add/edit events:
   "name": "Event Name",
   "type": "convention",
   "date": "2026-06-15",
-  "time": "2:00 PM - 4:00 PM",
+  "time": "2:00 PM",
   "venue": "Venue Name",
   "city": "City, State",
-  "description": "Description of the event",
-  "ticketUrl": "https://link-to-tickets.com"
+  "description": "Description",
+  "ticketUrl": "https://..."
 }
 ```
 
@@ -71,44 +84,36 @@ Events are stored in `public/data/events.json`. To add/edit events:
 
 ## 💬 Message Board
 
-The Fan Message Board allows fans to leave messages for Joe.
+Fan messages flow:
+1. Fan submits message → Email notification to Joe
+2. Joe approves → Adds to `messages.json` via GitHub
+3. Joe can reply → Add `adminReply` field
 
-### How It Works:
-1. **Fans submit messages** → Triggers email notification to Joe
-2. **Messages await review** → Stored in pending state
-3. **Joe approves** → Adds message to `messages.json` via GitHub
-4. **Joe can reply** → Add `adminReply` field to messages
-
-### Admin Features (when logged in):
-- **Reply** to fan messages
-- **Delete** inappropriate content
-- **Ban** users from posting
-- View pending submissions
-
-### Message Format (in messages.json):
-
+Message format:
 ```json
 {
   "id": 1,
   "name": "FanName",
-  "message": "Fan's message here...",
+  "message": "Message text...",
   "date": "2026-03-01",
-  "adminReply": "Joe's reply here...",
+  "adminReply": "Joe's reply...",
   "replyDate": "2026-03-02"
 }
 ```
 
-Set `adminReply` to `null` if no reply yet.
+## 📱 Social Links
 
-## ✉️ Email Signups
+Update social links in `src/App.jsx`:
 
-When fans subscribe, they're prompted to send an email to Joe directly. 
-
-**To change the email address:**
-1. Open `src/App.jsx`
-2. Find `const JOE_EMAIL = "joe@whytenoise.com"` at the top
-3. Change to your preferred email
-4. Commit and push
+```javascript
+const SOCIAL_LINKS = {
+  instagram: "https://www.instagram.com/joewhyte",
+  facebook: "https://www.facebook.com/joewhyte",
+  youtube: "https://www.youtube.com/@joewhyte",
+  imdb: "https://www.imdb.com/name/nm0926679/",
+  website: "https://www.whytenoise.com/"
+}
+```
 
 ## 🛠️ Local Development
 
@@ -121,7 +126,19 @@ npm run dev
 
 # Build for production
 npm run build
+
+# Preview build
+npm run preview
 ```
+
+## 🎨 Design Features
+
+- **Marvel-inspired** bold typography and colors
+- **Comic-style** halftone patterns and diagonal accents
+- **Dynamic animations** with hover effects
+- **Skewed elements** for visual interest
+- **Red/black/white** color scheme
+- **Responsive** design for all devices
 
 ## 🔗 External Links
 
