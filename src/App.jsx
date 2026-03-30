@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 
 // ==================== CONFIG ====================
 const JOE_EMAIL = "joe@whytenoise.com"
@@ -31,6 +31,7 @@ export default function App() {
     home: <HomePage setCurrentPage={setCurrentPage} />,
     achievements: <AchievementsPage />,
     gallery: <GalleryPage />,
+    game: <GamePage />,
     messageboard: <MessageBoardPage isAdmin={isAdmin} />,
     social: <SocialPage />,
     about: <AboutPage />,
@@ -81,6 +82,7 @@ export default function App() {
                 { id: 'home', label: 'HOME' },
                 { id: 'achievements', label: 'CREDITS' },
                 { id: 'gallery', label: 'ART' },
+                { id: 'game', label: '🎮 PLAY' },
                 { id: 'social', label: 'SOCIAL' },
                 { id: 'messageboard', label: 'FAN ZONE' },
                 { id: 'about', label: 'ABOUT' },
@@ -122,7 +124,7 @@ export default function App() {
           {/* Mobile Nav */}
           {mobileMenuOpen && (
             <div className="lg:hidden pb-4 space-y-1 border-t border-red-600/50 pt-4">
-              {['home', 'achievements', 'gallery', 'social', 'messageboard', 'about'].map(id => (
+              {['home', 'achievements', 'gallery', 'game', 'social', 'messageboard', 'about'].map(id => (
                 <button
                   key={id}
                   onClick={() => { setCurrentPage(id); setMobileMenuOpen(false); }}
@@ -435,17 +437,24 @@ function HomePage({ setCurrentPage }) {
 
       {/* QUICK LINKS */}
       <section className="py-20 px-4 bg-gray-900">
-        <div className="max-w-5xl mx-auto grid md:grid-cols-3 gap-6">
+        <div className="max-w-6xl mx-auto grid md:grid-cols-2 lg:grid-cols-4 gap-6">
           <button onClick={() => setCurrentPage('gallery')} className="group bg-black border-4 border-gray-800 hover:border-red-500 p-8 text-left transition-all">
             <div className="text-4xl mb-4 group-hover:scale-125 transition-transform">🎨</div>
             <h3 className="text-xl font-black text-red-400 mb-2">ART GALLERY</h3>
-            <p className="text-gray-500 text-sm">Explore Joe's CG modeling and animation work</p>
+            <p className="text-gray-500 text-sm">Explore Joe's CG modeling work</p>
+          </button>
+          
+          <button onClick={() => setCurrentPage('game')} className="group bg-black border-4 border-gray-800 hover:border-green-500 p-8 text-left transition-all relative overflow-hidden">
+            <div className="absolute top-2 right-2 bg-green-500 text-black text-xs font-black px-2 py-1">NEW!</div>
+            <div className="text-4xl mb-4 group-hover:scale-125 transition-transform">🎮</div>
+            <h3 className="text-xl font-black text-green-400 mb-2">PLAY GAME</h3>
+            <p className="text-gray-500 text-sm">Joe's RE Escape - endless runner!</p>
           </button>
           
           <button onClick={() => setCurrentPage('social')} className="group bg-black border-4 border-gray-800 hover:border-blue-500 p-8 text-left transition-all">
             <div className="text-4xl mb-4 group-hover:scale-125 transition-transform">📱</div>
             <h3 className="text-xl font-black text-blue-400 mb-2">SOCIAL FEEDS</h3>
-            <p className="text-gray-500 text-sm">Follow Joe on Instagram, YouTube & more</p>
+            <p className="text-gray-500 text-sm">Follow Joe on social media</p>
           </button>
           
           <button onClick={() => setCurrentPage('messageboard')} className="group bg-black border-4 border-gray-800 hover:border-yellow-500 p-8 text-left transition-all">
@@ -977,5 +986,636 @@ function AdminPage({ isAdmin }) {
         </div>
       </div>
     </div>
+  )
+}
+
+// ==================== GAME PAGE ====================
+function GamePage() {
+  const [gameState, setGameState] = useState('menu') // menu, playing, gameover
+  const [score, setScore] = useState(0)
+  const [highScore, setHighScore] = useState(() => {
+    return parseInt(localStorage.getItem('joewhyte_highscore') || '0')
+  })
+
+  useEffect(() => {
+    if (score > highScore) {
+      setHighScore(score)
+      localStorage.setItem('joewhyte_highscore', score.toString())
+    }
+  }, [score, highScore])
+
+  const startGame = () => {
+    setScore(0)
+    setGameState('playing')
+  }
+
+  const endGame = (finalScore) => {
+    setScore(finalScore)
+    setGameState('gameover')
+  }
+
+  return (
+    <div className="py-8 px-4">
+      <div className="max-w-4xl mx-auto">
+        {/* Header */}
+        <div className="text-center mb-8">
+          <h1 className="text-4xl md:text-6xl font-black mb-2">
+            <span className="text-red-500">RESIDENT</span> <span className="text-green-500">EVIL</span>
+          </h1>
+          <h2 className="text-2xl md:text-3xl font-black text-yellow-400">JOE'S ESCAPE</h2>
+          <p className="text-gray-400 mt-2">Help Joe escape the zombie-infested mansion!</p>
+        </div>
+
+        {/* Game Container */}
+        <div className="relative bg-black border-4 border-red-600 rounded-lg overflow-hidden" style={{ aspectRatio: '16/9', maxHeight: '500px' }}>
+          {gameState === 'menu' && (
+            <GameMenu onStart={startGame} highScore={highScore} />
+          )}
+          
+          {gameState === 'playing' && (
+            <GameCanvas onGameOver={endGame} />
+          )}
+          
+          {gameState === 'gameover' && (
+            <GameOver score={score} highScore={highScore} onRestart={startGame} />
+          )}
+        </div>
+
+        {/* Controls */}
+        <div className="mt-6 bg-gray-900 border-4 border-gray-800 p-6">
+          <h3 className="font-black text-yellow-400 mb-4">🎮 CONTROLS</h3>
+          <div className="grid md:grid-cols-2 gap-4 text-sm">
+            <div className="flex items-center gap-3">
+              <span className="bg-gray-800 px-3 py-2 font-mono font-bold">SPACE</span>
+              <span className="text-gray-400">Jump</span>
+            </div>
+            <div className="flex items-center gap-3">
+              <span className="bg-gray-800 px-3 py-2 font-mono font-bold">↑</span>
+              <span className="text-gray-400">Jump</span>
+            </div>
+            <div className="flex items-center gap-3">
+              <span className="bg-gray-800 px-3 py-2 font-mono font-bold">↓</span>
+              <span className="text-gray-400">Duck / Fast Fall</span>
+            </div>
+            <div className="flex items-center gap-3">
+              <span className="bg-gray-800 px-3 py-2 font-mono font-bold">TAP</span>
+              <span className="text-gray-400">Jump (Mobile)</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Leaderboard teaser */}
+        <div className="mt-6 text-center">
+          <div className="inline-block bg-gradient-to-r from-yellow-500/20 to-red-500/20 border-2 border-yellow-500/50 px-6 py-4">
+            <p className="text-yellow-400 font-bold">🏆 YOUR HIGH SCORE: {highScore.toLocaleString()}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// Game Menu Screen
+function GameMenu({ onStart, highScore }) {
+  return (
+    <div className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-b from-gray-900 via-black to-red-900/50">
+      {/* Animated background */}
+      <div className="absolute inset-0 overflow-hidden">
+        {[...Array(20)].map((_, i) => (
+          <div
+            key={i}
+            className="absolute text-4xl animate-pulse"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              animationDelay: `${Math.random() * 2}s`,
+              opacity: 0.1
+            }}
+          >
+            🧟
+          </div>
+        ))}
+      </div>
+      
+      <div className="relative z-10 text-center">
+        {/* Joe Character */}
+        <div className="text-8xl mb-6 animate-bounce">🏃</div>
+        
+        <h2 className="text-3xl font-black text-red-500 mb-2" style={{ textShadow: '0 0 20px rgba(220,38,38,0.5)' }}>
+          JOE'S ESCAPE
+        </h2>
+        <p className="text-gray-400 mb-8">Survive the zombie horde!</p>
+        
+        <button
+          onClick={onStart}
+          className="px-12 py-4 bg-red-600 hover:bg-red-500 font-black text-2xl tracking-wider transform hover:scale-110 transition-all border-b-4 border-red-800 hover:border-red-600"
+        >
+          ▶ START
+        </button>
+        
+        {highScore > 0 && (
+          <p className="mt-6 text-yellow-400 font-bold">🏆 Best: {highScore.toLocaleString()}</p>
+        )}
+        
+        <p className="mt-8 text-gray-500 text-sm">Press SPACE or TAP to start</p>
+      </div>
+    </div>
+  )
+}
+
+// Game Over Screen
+function GameOver({ score, highScore, onRestart }) {
+  const isNewRecord = score >= highScore && score > 0
+  
+  return (
+    <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/90">
+      {/* Blood splatter effect */}
+      <div className="absolute inset-0 opacity-20">
+        <div className="absolute top-0 left-1/4 w-32 h-32 bg-red-600 rounded-full blur-3xl" />
+        <div className="absolute bottom-1/4 right-1/3 w-24 h-24 bg-red-600 rounded-full blur-2xl" />
+      </div>
+      
+      <div className="relative z-10 text-center">
+        <div className="text-6xl mb-4">💀</div>
+        
+        <h2 className="text-4xl font-black text-red-500 mb-4" style={{ textShadow: '0 0 20px rgba(220,38,38,0.8)' }}>
+          GAME OVER
+        </h2>
+        
+        {isNewRecord && (
+          <div className="mb-4 px-6 py-2 bg-yellow-500 text-black font-black text-xl animate-pulse">
+            🎉 NEW HIGH SCORE! 🎉
+          </div>
+        )}
+        
+        <div className="mb-8">
+          <p className="text-5xl font-black text-white mb-2">{score.toLocaleString()}</p>
+          <p className="text-gray-400">ZOMBIES ESCAPED</p>
+        </div>
+        
+        <button
+          onClick={onRestart}
+          className="px-12 py-4 bg-green-600 hover:bg-green-500 font-black text-xl tracking-wider transform hover:scale-110 transition-all border-b-4 border-green-800"
+        >
+          🔄 TRY AGAIN
+        </button>
+        
+        <p className="mt-6 text-gray-500 text-sm">Press SPACE to restart</p>
+      </div>
+    </div>
+  )
+}
+
+// Main Game Canvas
+function GameCanvas({ onGameOver }) {
+  const canvasRef = useRef(null)
+  const gameRef = useRef(null)
+  
+  useEffect(() => {
+    const canvas = canvasRef.current
+    const ctx = canvas.getContext('2d')
+    
+    // Set canvas size
+    const resize = () => {
+      const container = canvas.parentElement
+      canvas.width = container.clientWidth
+      canvas.height = container.clientHeight
+    }
+    resize()
+    window.addEventListener('resize', resize)
+    
+    // Game state
+    const game = {
+      running: true,
+      score: 0,
+      speed: 6,
+      gravity: 0.6,
+      groundY: canvas.height - 60,
+      
+      // Player
+      player: {
+        x: 80,
+        y: canvas.height - 60 - 60,
+        width: 40,
+        height: 60,
+        velocityY: 0,
+        jumping: false,
+        ducking: false,
+        frame: 0,
+        frameTimer: 0
+      },
+      
+      // Obstacles
+      obstacles: [],
+      obstacleTimer: 0,
+      
+      // Particles (explosions, dust)
+      particles: [],
+      
+      // Background layers
+      bgOffset: 0,
+      clouds: [],
+      fires: []
+    }
+    
+    gameRef.current = game
+    
+    // Initialize clouds
+    for (let i = 0; i < 5; i++) {
+      game.clouds.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * 150 + 20,
+        size: Math.random() * 40 + 20,
+        speed: Math.random() * 0.5 + 0.2
+      })
+    }
+    
+    // Initialize fires
+    for (let i = 0; i < 8; i++) {
+      game.fires.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * 100 + 50,
+        size: Math.random() * 30 + 10,
+        flicker: 0
+      })
+    }
+    
+    // Input handling
+    const handleKeyDown = (e) => {
+      if (e.code === 'Space' || e.code === 'ArrowUp') {
+        e.preventDefault()
+        jump()
+      }
+      if (e.code === 'ArrowDown') {
+        e.preventDefault()
+        game.player.ducking = true
+        if (game.player.jumping) {
+          game.player.velocityY = 15 // Fast fall
+        }
+      }
+    }
+    
+    const handleKeyUp = (e) => {
+      if (e.code === 'ArrowDown') {
+        game.player.ducking = false
+      }
+    }
+    
+    const handleTouch = (e) => {
+      e.preventDefault()
+      jump()
+    }
+    
+    const jump = () => {
+      if (!game.player.jumping) {
+        game.player.velocityY = -14
+        game.player.jumping = true
+        addDustParticles(game.player.x + 20, game.groundY)
+      }
+    }
+    
+    window.addEventListener('keydown', handleKeyDown)
+    window.addEventListener('keyup', handleKeyUp)
+    canvas.addEventListener('touchstart', handleTouch)
+    canvas.addEventListener('click', jump)
+    
+    // Add particles
+    const addDustParticles = (x, y) => {
+      for (let i = 0; i < 5; i++) {
+        game.particles.push({
+          x, y,
+          vx: (Math.random() - 0.5) * 4,
+          vy: -Math.random() * 3,
+          size: Math.random() * 8 + 4,
+          life: 1,
+          color: '#8B4513'
+        })
+      }
+    }
+    
+    const addExplosion = (x, y) => {
+      const colors = ['#ff4400', '#ff8800', '#ffcc00', '#ff0000']
+      for (let i = 0; i < 20; i++) {
+        const angle = (Math.PI * 2 / 20) * i
+        const speed = Math.random() * 8 + 4
+        game.particles.push({
+          x, y,
+          vx: Math.cos(angle) * speed,
+          vy: Math.sin(angle) * speed,
+          size: Math.random() * 12 + 6,
+          life: 1,
+          color: colors[Math.floor(Math.random() * colors.length)]
+        })
+      }
+    }
+    
+    // Spawn obstacle
+    const spawnObstacle = () => {
+      const types = [
+        { type: 'zombie', emoji: '🧟', width: 40, height: 60, ground: true },
+        { type: 'dog', emoji: '🐕', width: 50, height: 35, ground: true },
+        { type: 'barrel', emoji: '🛢️', width: 35, height: 45, ground: true },
+        { type: 'bat', emoji: '🦇', width: 35, height: 25, ground: false, y: game.groundY - 100 },
+        { type: 'crate', emoji: '📦', width: 40, height: 40, ground: true },
+      ]
+      
+      const type = types[Math.floor(Math.random() * types.length)]
+      
+      game.obstacles.push({
+        ...type,
+        x: canvas.width + 50,
+        y: type.ground ? game.groundY - type.height : type.y,
+        passed: false
+      })
+    }
+    
+    // Game loop
+    const gameLoop = () => {
+      if (!game.running) return
+      
+      ctx.clearRect(0, 0, canvas.width, canvas.height)
+      
+      // Draw background
+      drawBackground(ctx, canvas, game)
+      
+      // Update and draw player
+      updatePlayer(game, canvas)
+      drawPlayer(ctx, game)
+      
+      // Update and draw obstacles
+      game.obstacleTimer++
+      const spawnRate = Math.max(60, 120 - Math.floor(game.score / 10))
+      if (game.obstacleTimer > spawnRate) {
+        spawnObstacle()
+        game.obstacleTimer = 0
+      }
+      
+      for (let i = game.obstacles.length - 1; i >= 0; i--) {
+        const obs = game.obstacles[i]
+        obs.x -= game.speed
+        
+        // Draw obstacle
+        ctx.font = `${obs.height}px Arial`
+        ctx.fillText(obs.emoji, obs.x, obs.y + obs.height - 5)
+        
+        // Check collision
+        const p = game.player
+        const hitboxShrink = 10
+        if (
+          p.x + hitboxShrink < obs.x + obs.width &&
+          p.x + p.width - hitboxShrink > obs.x &&
+          p.y + hitboxShrink < obs.y + obs.height &&
+          p.y + p.height - hitboxShrink > obs.y
+        ) {
+          addExplosion(p.x + p.width / 2, p.y + p.height / 2)
+          game.running = false
+          setTimeout(() => onGameOver(game.score), 500)
+        }
+        
+        // Score point when passed
+        if (!obs.passed && obs.x + obs.width < p.x) {
+          obs.passed = true
+          game.score++
+          // Speed up
+          if (game.score % 10 === 0) {
+            game.speed = Math.min(15, game.speed + 0.5)
+          }
+        }
+        
+        // Remove off-screen
+        if (obs.x < -100) {
+          game.obstacles.splice(i, 1)
+        }
+      }
+      
+      // Update and draw particles
+      for (let i = game.particles.length - 1; i >= 0; i--) {
+        const p = game.particles[i]
+        p.x += p.vx
+        p.y += p.vy
+        p.vy += 0.2
+        p.life -= 0.03
+        
+        if (p.life <= 0) {
+          game.particles.splice(i, 1)
+        } else {
+          ctx.globalAlpha = p.life
+          ctx.fillStyle = p.color
+          ctx.beginPath()
+          ctx.arc(p.x, p.y, p.size * p.life, 0, Math.PI * 2)
+          ctx.fill()
+          ctx.globalAlpha = 1
+        }
+      }
+      
+      // Draw ground
+      ctx.fillStyle = '#2d1b0e'
+      ctx.fillRect(0, game.groundY, canvas.width, 60)
+      ctx.fillStyle = '#1a0f08'
+      for (let i = 0; i < canvas.width; i += 30) {
+        ctx.fillRect(i - (game.bgOffset % 30), game.groundY, 2, 60)
+      }
+      
+      // Draw score
+      ctx.fillStyle = '#fff'
+      ctx.font = 'bold 24px Arial'
+      ctx.fillText(`SCORE: ${game.score}`, 20, 40)
+      
+      // Draw speed indicator
+      ctx.fillStyle = '#ff4444'
+      ctx.font = '14px Arial'
+      ctx.fillText(`SPEED: ${game.speed.toFixed(1)}x`, 20, 65)
+      
+      game.bgOffset += game.speed
+      
+      requestAnimationFrame(gameLoop)
+    }
+    
+    const updatePlayer = (game, canvas) => {
+      const p = game.player
+      
+      // Apply gravity
+      p.velocityY += game.gravity
+      p.y += p.velocityY
+      
+      // Ground collision
+      const groundLevel = game.groundY - (p.ducking ? 30 : 60)
+      if (p.y >= groundLevel) {
+        p.y = groundLevel
+        p.velocityY = 0
+        p.jumping = false
+      }
+      
+      // Update height when ducking
+      p.height = p.ducking ? 30 : 60
+      
+      // Animation frame
+      p.frameTimer++
+      if (p.frameTimer > 8) {
+        p.frame = (p.frame + 1) % 2
+        p.frameTimer = 0
+      }
+    }
+    
+    const drawPlayer = (ctx, game) => {
+      const p = game.player
+      
+      // Draw Joe
+      ctx.save()
+      
+      // Body
+      const bodyColor = '#1e40af' // Blue outfit
+      const skinColor = '#f4c7a0'
+      
+      if (p.ducking) {
+        // Ducking pose - crouched
+        ctx.fillStyle = bodyColor
+        ctx.fillRect(p.x, p.y + 10, 40, 20)
+        ctx.fillStyle = skinColor
+        ctx.beginPath()
+        ctx.arc(p.x + 30, p.y + 10, 12, 0, Math.PI * 2)
+        ctx.fill()
+      } else {
+        // Running pose
+        ctx.fillStyle = bodyColor
+        ctx.fillRect(p.x + 10, p.y + 20, 20, 30)
+        
+        // Legs (animated)
+        const legOffset = p.jumping ? 0 : Math.sin(p.frame * Math.PI) * 10
+        ctx.fillRect(p.x + 10, p.y + 45, 8, 15 + legOffset)
+        ctx.fillRect(p.x + 22, p.y + 45, 8, 15 - legOffset)
+        
+        // Head
+        ctx.fillStyle = skinColor
+        ctx.beginPath()
+        ctx.arc(p.x + 20, p.y + 12, 12, 0, Math.PI * 2)
+        ctx.fill()
+        
+        // Hair
+        ctx.fillStyle = '#3d2314'
+        ctx.beginPath()
+        ctx.arc(p.x + 20, p.y + 8, 10, Math.PI, Math.PI * 2)
+        ctx.fill()
+        
+        // Arms
+        ctx.fillStyle = skinColor
+        if (p.jumping) {
+          ctx.fillRect(p.x, p.y + 22, 12, 6)
+          ctx.fillRect(p.x + 28, p.y + 22, 12, 6)
+        } else {
+          const armSwing = Math.sin(p.frame * Math.PI) * 8
+          ctx.save()
+          ctx.translate(p.x + 8, p.y + 25)
+          ctx.rotate(armSwing * 0.1)
+          ctx.fillRect(-4, 0, 6, 15)
+          ctx.restore()
+          ctx.save()
+          ctx.translate(p.x + 32, p.y + 25)
+          ctx.rotate(-armSwing * 0.1)
+          ctx.fillRect(-2, 0, 6, 15)
+          ctx.restore()
+        }
+      }
+      
+      ctx.restore()
+    }
+    
+    const drawBackground = (ctx, canvas, game) => {
+      // Night sky gradient
+      const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height)
+      gradient.addColorStop(0, '#0a0a15')
+      gradient.addColorStop(0.5, '#1a0505')
+      gradient.addColorStop(1, '#2d0a0a')
+      ctx.fillStyle = gradient
+      ctx.fillRect(0, 0, canvas.width, canvas.height)
+      
+      // Moon
+      ctx.fillStyle = '#fff8e7'
+      ctx.globalAlpha = 0.8
+      ctx.beginPath()
+      ctx.arc(canvas.width - 80, 60, 35, 0, Math.PI * 2)
+      ctx.fill()
+      ctx.globalAlpha = 1
+      
+      // Clouds (smoke)
+      ctx.fillStyle = '#333'
+      game.clouds.forEach(cloud => {
+        cloud.x -= cloud.speed
+        if (cloud.x < -50) cloud.x = canvas.width + 50
+        
+        ctx.globalAlpha = 0.3
+        ctx.beginPath()
+        ctx.arc(cloud.x, cloud.y, cloud.size, 0, Math.PI * 2)
+        ctx.arc(cloud.x + cloud.size * 0.6, cloud.y - 5, cloud.size * 0.7, 0, Math.PI * 2)
+        ctx.arc(cloud.x - cloud.size * 0.4, cloud.y + 5, cloud.size * 0.5, 0, Math.PI * 2)
+        ctx.fill()
+        ctx.globalAlpha = 1
+      })
+      
+      // Burning mansion silhouette
+      ctx.fillStyle = '#0a0505'
+      // Main building
+      ctx.fillRect(canvas.width - 350 - (game.bgOffset * 0.1) % 100, game.groundY - 180, 200, 180)
+      // Tower
+      ctx.fillRect(canvas.width - 300 - (game.bgOffset * 0.1) % 100, game.groundY - 250, 60, 70)
+      // Roof
+      ctx.beginPath()
+      ctx.moveTo(canvas.width - 360 - (game.bgOffset * 0.1) % 100, game.groundY - 180)
+      ctx.lineTo(canvas.width - 250 - (game.bgOffset * 0.1) % 100, game.groundY - 220)
+      ctx.lineTo(canvas.width - 140 - (game.bgOffset * 0.1) % 100, game.groundY - 180)
+      ctx.fill()
+      
+      // Fires on building
+      game.fires.forEach(fire => {
+        fire.flicker += 0.2
+        const flicker = Math.sin(fire.flicker) * 5
+        
+        const fireGradient = ctx.createRadialGradient(
+          fire.x - (game.bgOffset * 0.1) % 200, game.groundY - fire.y,
+          0,
+          fire.x - (game.bgOffset * 0.1) % 200, game.groundY - fire.y,
+          fire.size + flicker
+        )
+        fireGradient.addColorStop(0, 'rgba(255, 200, 50, 0.8)')
+        fireGradient.addColorStop(0.5, 'rgba(255, 100, 0, 0.5)')
+        fireGradient.addColorStop(1, 'rgba(255, 0, 0, 0)')
+        
+        ctx.fillStyle = fireGradient
+        ctx.beginPath()
+        ctx.arc(fire.x - (game.bgOffset * 0.1) % 200, game.groundY - fire.y, fire.size + flicker, 0, Math.PI * 2)
+        ctx.fill()
+      })
+      
+      // Trees silhouette
+      for (let i = 0; i < 5; i++) {
+        const tx = (i * 200 - (game.bgOffset * 0.3) % 200) % (canvas.width + 100) - 50
+        ctx.fillStyle = '#050505'
+        ctx.beginPath()
+        ctx.moveTo(tx, game.groundY)
+        ctx.lineTo(tx + 15, game.groundY - 80)
+        ctx.lineTo(tx + 30, game.groundY)
+        ctx.fill()
+        ctx.fillRect(tx + 12, game.groundY - 20, 6, 20)
+      }
+    }
+    
+    gameLoop()
+    
+    return () => {
+      game.running = false
+      window.removeEventListener('resize', resize)
+      window.removeEventListener('keydown', handleKeyDown)
+      window.removeEventListener('keyup', handleKeyUp)
+      canvas.removeEventListener('touchstart', handleTouch)
+      canvas.removeEventListener('click', jump)
+    }
+  }, [onGameOver])
+  
+  return (
+    <canvas 
+      ref={canvasRef} 
+      className="w-full h-full cursor-pointer"
+      style={{ touchAction: 'none' }}
+    />
   )
 }
