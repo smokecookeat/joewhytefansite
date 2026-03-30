@@ -31,10 +31,29 @@ Set these environment variables in Vercel:
 - **HOME** - Hero section, events, stats, quick links
 - **CREDITS** - Career achievements (Disney, Gaming, Other, Comedy)
 - **ART** - Gallery of Joe's CG modeling work
+- **🎮 PLAY** - Resident Evil-themed endless runner game!
 - **SOCIAL** - Instagram, YouTube, Facebook feeds
 - **FAN ZONE** - Message board with admin moderation
 - **ABOUT** - Bio and personal info
 - **ADMIN** - Dashboard for site management
+
+### 🎮 JOE'S ESCAPE - Mini Game!
+
+An exciting Resident Evil-themed endless runner where you play as Joe escaping a zombie-infested mansion!
+
+**Features:**
+- 🏃 Play as Joe running through a burning mansion
+- 🧟 Dodge zombies, zombie dogs, barrels, bats, and crates
+- 💥 Explosive particle effects
+- 🔥 Dynamic burning mansion background
+- 🏆 High score saved locally
+- 📱 Works on mobile (tap to jump)
+- ⬆️ Speed increases as you progress
+
+**Controls:**
+- `SPACE` or `↑` - Jump
+- `↓` - Duck / Fast Fall
+- `TAP` - Jump (Mobile)
 
 ### Admin Features
 - ✅ Reply to fan messages
